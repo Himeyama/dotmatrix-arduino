@@ -34,10 +34,26 @@ uint8_t font[8][17] = {
  *  @details ディスプレイとシリアル通信の初期化を行う
  */
 void setup() {
+  initSerial();
+  initSPI();
+  initDisplay();
+}
+
+/** @brief シリアル通信の初期化
+ */
+void initSerial() {
   Serial.begin(9600); ///< シリアル通信の開始
+}
 
+/** @brief SPI通信の初期化
+ */
+void initSPI() {
   SPI.begin(); ///< SPI通信の開始
+}
 
+/** @brief ディスプレイの初期化
+ */
+void initDisplay() {
   p.begin(2); ///< ディスプレイの初期化
   p.setZone(0, 0, 7); ///< ゾーン0の設定
   p.setZone(1, 8, 15); ///< ゾーン1の設定
@@ -93,8 +109,6 @@ void parseData(String data, char separator) {
   int lastNumber = lastToken.toInt();
   font[7][16] = lastNumber;
 }
-
-int i = 0;
 
 /** @brief メインループ関数
  *  @details シリアル通信からデータを読み取り、ディスプレイに表示する
