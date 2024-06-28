@@ -14,7 +14,7 @@
 // MD_Parola インスタンスを作成
 MD_Parola p = MD_Parola(HARDWARE_TYPE, CS_PIN, MAX_DEVICES);
 
-uint8_t font[8][16] = {
+uint8_t font[8][17] = {
   {},
   {},
   {},
@@ -54,22 +54,39 @@ void parseData(String data, char separator) {
     String token = data.substring(startIndex, endIndex);
     int number = token.toInt();
 
-    if(i < 16)
+    // if(i < 16)
+    //   font[0][i] = number;
+    // else if (i < 32)
+    //   font[1][i - 16] = number;
+    // else if (i < 48)
+    //   font[2][i - 32] = number;
+    // else if (i < 64)  //48-79
+    //   font[3][i - 48] = number;
+    // else if (i < 80)
+    //   font[4][i - 64] = number;
+    // else if (i < 96)
+    //   font[5][i - 80] = number;
+    // else if (i < 112)
+    //   font[6][i - 96] = number;
+    // else if (i < 128)
+    //   font[7][i - 112] = number;
+
+    if(i < 17) // 0-16
       font[0][i] = number;
-    else if (i < 32)
-      font[1][i - 16] = number;
-    else if (i < 48)
-      font[2][i - 32] = number;
-    else if (i < 64)  //48-79
-      font[3][i - 48] = number;
-    else if (i < 80)
-      font[4][i - 64] = number;
-    else if (i < 96)
-      font[5][i - 80] = number;
-    else if (i < 112)
-      font[6][i - 96] = number;
-    else if (i < 128)
-      font[7][i - 112] = number;
+    else if(i < 34) // 17-34
+      font[1][i - 17] = number;
+    else if(i < 51) // 32-47
+      font[2][i - 34] = number;
+    else if(i < 68) //48-79
+      font[3][i - 51] = number;
+    else if(i < 85)
+      font[4][i - 68] = number;
+    else if(i < 102)
+      font[5][i - 85] = number;
+    else if(i < 119)
+      font[6][i - 102] = number;
+    else if(i < 136)
+      font[7][i - 119] = number;
     
     i++;
     startIndex = endIndex + 1;
@@ -78,7 +95,7 @@ void parseData(String data, char separator) {
   // 最後の数値を取得
   String lastToken = data.substring(startIndex);
   int lastNumber = lastToken.toInt();
-  font[7][15] = lastNumber;
+  font[7][16] = lastNumber;
 }
 
 int i = 0;
