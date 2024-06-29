@@ -19,16 +19,7 @@
 MD_Parola p = MD_Parola(HARDWARE_TYPE, CS_PIN, MAX_DEVICES); ///< MD_Parola インスタンスを作成
 
 /** @brief フォントデータを格納する配列 */
-uint8_t font[8][17] = {
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {},
-  {} 
-};
+uint8_t font[8][17] = {};
 
 /** @brief セットアップ関数
  *  @details ディスプレイとシリアル通信の初期化を行う
@@ -55,6 +46,9 @@ void initSPI() {
  */
 void initDisplay() {
   p.begin(2); ///< ディスプレイの初期化
+  
+  p.setIntensity(1);
+
   p.setZone(0, 0, 7); ///< ゾーン0の設定
   p.setZone(1, 8, 15); ///< ゾーン1の設定
 
@@ -83,22 +77,9 @@ void parseData(String data, char separator) {
     String token = data.substring(startIndex, endIndex);
     int number = token.toInt();
 
-    if(i < 17)
-      font[0][i] = number;
-    else if(i < 34)
-      font[1][i - 17] = number;
-    else if(i < 51)
-      font[2][i - 34] = number;
-    else if(i < 68)
-      font[3][i - 51] = number;
-    else if(i < 85)
-      font[4][i - 68] = number;
-    else if(i < 102)
-      font[5][i - 85] = number;
-    else if(i < 119)
-      font[6][i - 102] = number;
-    else if(i < 136)
-      font[7][i - 119] = number;
+    for(int j = 0; j < 8; j++)
+      if(i >= j*17 && i < (j+1)*17)
+        font[j][i - j*17] = number;
     
     i++;
     startIndex = endIndex + 1;
@@ -122,7 +103,6 @@ void loop() {
   if(p.displayAnimate()){
     for (int i = 0; i < 8; ++i)
       p.addChar('\x1' + i, font[i]);
-
     p.displayZoneText(0, "\x1\x3\x5\x7", PA_LEFT, 50, 0, PA_PRINT, PA_NO_EFFECT);
     p.displayZoneText(1, "\x2\x4\x6\x8", PA_LEFT, 50, 0, PA_PRINT, PA_NO_EFFECT);
   }
